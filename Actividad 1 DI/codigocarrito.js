@@ -9,17 +9,23 @@ var totalArticulos;
 var totalPrecio;
 
 var errorArticulo;
-var precioNumerico;
-var errorPrecio = /^\d+$/;
+var errorPrecio;
+var precioNumerico = /^\d+$/;
 
+var condiciones;
 var imprimir;
 var articulos = [];
-var preioTotal;
+var precioTotal = 0;
 var a;
 var b;
 
 window.onload = function (){
 	init();
+
+
+	
+
+	
 }
 
 function initVariables(){
@@ -33,12 +39,15 @@ function initVariables(){
 	imprimir = document.getElementById('imprimir');
 	totalArticulos = document.getElementById('totalArticulos');
 	totalPrecio = document.getElementById('totalPrecio');	
+	imprimir = document.getElementById('imprimir');	
+	condiciones = document.getElementById('condiciones');	
 	nombreArticulo.focus();
 }
 
 function initEventos(){
 	anadirCarrito.addEventListener("click", añadir);
 	imprimir.addEventListener("click", imprimirCompra);
+	condiciones.addEventListener("input", aceptarCondiciones);
 }
 
 
@@ -56,28 +65,40 @@ function añadir (){
 	if (precioArticulo.value == ""){
 		errorPrecio.textContent = "Falta añadir precio.";
 		b = false;
-	}else if (errorPrecio.test(precioArticulo)){
+		}else if (false /* FALTA COMPROBAR QUE EL DATO SEA UN NÚMERO!typeof precioArticulo.value === 'number'*/ ){
 		errorPrecio.textContent = "Tipo de dato incorrecto.";
 		b = false
-		}else {
-			b = true;
-		} 
-
+			}else {
+				b = true;
+			} 
 
 
 	if (a && b) {
 		articulos.push(nombreArticulo.value);
 		totalArticulos.textContent =  articulos + " ";
 
-		preioTotal += precioArticulo;
+		//NO ME SUMA LOS PRECIOS...
+		precioTotal = (precioTotal + precioArticulo.value);
 		totalPrecio.textContent = precioTotal;
-
-	} else{}
+	}
 
 
 	nombreArticulo.value = ("");
 	precioArticulo.value = ("");
 	
+}
+
+//NO FUNCIONAA
+function aceptarCondiciones(){
+	if (condiciones.value == Y){
+		imprimir.disabled = false;
+	}else{
+		imprimir.disabled = true;
+		}
+}
+
+function imprimirCompra(){
+
 }
 
 
