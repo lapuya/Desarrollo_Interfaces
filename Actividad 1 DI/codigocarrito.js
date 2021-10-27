@@ -66,7 +66,7 @@ function anadir (){
 	if (precioArticulo.value == ""){
 		errorFaltaPrecio.textContent = "Falta añadir precio.";
 		b = false;
-		}else if (isNaN(precioArticulo)== false){
+		}else if (isNaN(precioArticulo)== true){
 		errorTipoIncorrecto.textContent = "Tipo de dato incorrecto.";
 		b = false
 			}else {

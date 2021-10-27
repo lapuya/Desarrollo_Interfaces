@@ -1,6 +1,13 @@
 h1{
-    color: rgb(206, 50, 50);
+    color: #0a00668c;
+    font-size:20px;
+
 }
 div{
-    background-color: rgb(199, 255, 250);
+    background-color: rgba(199, 242, 255, 0.767);
+}
+body{
+    font-family: Verdana;
+    font-size: 14px;
+}
 }
