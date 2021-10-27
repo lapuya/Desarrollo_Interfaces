@@ -8,8 +8,9 @@ var formaPago;
 var totalArticulos;
 var totalPrecio;
 
-var errorArticulo;
-var errorPrecio;
+var errorFaltaArticulo;
+var errorFaltaPrecio;
+var errorTipoIncorrecto;
 var precioNumerico = /^\d+$/;
 
 var condiciones;
@@ -27,15 +28,15 @@ window.onload = function (){
 
 	
 }
-
+//Inicialización de las variables
 function initVariables(){
 	nombreArticulo = document.getElementById('nombre');
 	precioArticulo = document.getElementById('precio');
 	unidadesArticulo = document.getElementById('unidades');
 	anadirCarrito = document.getElementById('anadir');
 	formaPago = document.getElementById('pago');
-	errorArticulo = document.getElementById('falta_articulo');
-	errorPrecio = document.getElementById('falta_precio');
+	errorFaltaArticulo = document.getElementById('falta_articulo');
+	errorFaltaPrecio = document.getElementById('falta_precio');
 	imprimir = document.getElementById('imprimir');
 	totalArticulos = document.getElementById('totalArticulos');
 	totalPrecio = document.getElementById('totalPrecio');	
@@ -43,19 +44,19 @@ function initVariables(){
 	condiciones = document.getElementById('condiciones');	
 	nombreArticulo.focus();
 }
-
+//Inicialización de los eventos
 function initEventos(){
-	anadirCarrito.addEventListener("click", añadir);
+	anadirCarrito.addEventListener("click", anadir);
 	imprimir.addEventListener("click", imprimirCompra);
 	condiciones.addEventListener("input", aceptarCondiciones);
 }
 
-
-function añadir (){
+//Función para añadir al carrito
+function anadir (){
 
 
 	if (nombreArticulo.value == ""){
-		errorArticulo.textContent = "Falta añadir artículo.";
+		errorFaltaArticulo.textContent = "Falta añadir artículo.";
 		a = false;
 	} else{
 		a = true;
@@ -63,10 +64,10 @@ function añadir (){
 	}
 
 	if (precioArticulo.value == ""){
-		errorPrecio.textContent = "Falta añadir precio.";
+		errorFaltaPrecio.textContent = "Falta añadir precio.";
 		b = false;
-		}else if (false /* FALTA COMPROBAR QUE EL DATO SEA UN NÚMERO!typeof precioArticulo.value === 'number'*/ ){
-		errorPrecio.textContent = "Tipo de dato incorrecto.";
+		}else if (isNaN(precioArticulo)== false){
+		errorTipoIncorrecto.textContent = "Tipo de dato incorrecto.";
 		b = false
 			}else {
 				b = true;
