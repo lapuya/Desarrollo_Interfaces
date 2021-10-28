@@ -5,14 +5,15 @@ var precioArticulo;
 var unidadesArticulo;
 var anadirCarrito;
 var formaPago;
- 
+
 var totalArticulos;
 var totalPrecio;
- 
+
 var errorArticulo;
 var errorPrecio;
+var errorUnidades;
 var precioNumerico = /^\d+$/;
- 
+
 var condiciones;
 var imprimir;
 var articulos = [];
@@ -26,16 +27,16 @@ var numeroTarjeta;
 var cvv;
 var importeEfectivo;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
 window.onload = function (){
 	init();
- 
- 
- 
- 
- 
+
+
+
+
+
 }
- 
+
 function initVariables(){
 	nombreArticulo = document.getElementById('nombre');
 	precioArticulo = document.getElementById('precio');
@@ -44,12 +45,13 @@ function initVariables(){
 	formaPago = document.getElementById('pago');
 	errorArticulo = document.getElementById('falta_articulo');
 	errorPrecio = document.getElementById('falta_precio');
+  errorUnidades = document.getElementById('falta_unidades');
 	imprimir = document.getElementById('imprimir');
 	totalArticulos = document.getElementById('totalArticulos');
-	totalPrecio = document.getElementById('totalPrecio');		
-	condiciones = document.getElementById('condiciones');	
+	totalPrecio = document.getElementById('totalPrecio');
+	condiciones = document.getElementById('condiciones');
 	nombreArticulo.focus();
-	
+
 	pago = document.getElementById('pago');
 	titularTarjeta = document.getElementById('titularTarjeta');
 	numeroTarjeta = document.getElementById('numeroTarjeta');
@@ -59,50 +61,54 @@ function initVariables(){
 	capaEfectivo.style.display = "none";
 
 }
- 
+
 function initEventos(){
 	anadirCarrito.addEventListener("click", añadir);
 	imprimir.addEventListener("click", imprimirCompra);
 	condiciones.addEventListener("click", aceptarCondiciones);
 	pago.addEventListener("change", cargarPago);
 }
- 
- 
+
+
 function añadir (){
- 
- 
+
+
 	if (nombreArticulo.value == ""){
 		errorArticulo.textContent = "Falta añadir artículo.";
 		a = false;
 	} else{
 		a = true;
- 
+
 	}
- 
+
 	if (precioArticulo.value == ""){
 		errorPrecio.textContent = "Falta añadir precio.";
 		b = false;
-		}else if (false /* FALTA COMPROBAR QUE EL DATO SEA UN NÚMERO!typeof precioArticulo.value === 'number'*/ ){
+  } else if (isNaN(precioArticulo.value)){
 		errorPrecio.textContent = "Tipo de dato incorrecto.";
 		b = false
-			}else {
+	} else
 				b = true;
-			} 
- 
- 
+  //comprobar que las unidades del articulo es mayor que 0
+  if (unidades.value <= 0) {
+    errorUnidades.textContent = "Las unidades no pueden ser 0 o menor.";
+    a = false; //ponemos 'a' falso para que no se añada al carrito
+  }
+
+  //Si el articulo, el precio y las unidades están bien añadimos
 	if (a && b) {
 		articulos.push(nombreArticulo.value);
 		totalArticulos.textContent = articulos + "";
- 
-		
+
+
 		precioTotal += (parseFloat(precioArticulo.value) * parseFloat(unidadesArticulo.value));
 		totalPrecio.textContent = precioTotal;
 	}
- 
- 
+
+
 	nombreArticulo.value = ("");
 	precioArticulo.value = ("");
- 
+
 }
 //Función para proceder al pago
 function cargarPago(){
@@ -115,7 +121,7 @@ function cargarPago(){
 	}else{
 		capaTarjeta.style.display="none";
 		capaEfectivo.style.display="block";
-	}	
+	}
 }
 
 //Función que permite imprimir al aceptar condiciones
@@ -147,10 +153,10 @@ function imprimirCompra(){
 		}else alert("seleccione un método de pago");
 	}
 }
- 
- 
- 
- 
+
+
+
+
 function init(){
 	initVariables();
 	initEventos();

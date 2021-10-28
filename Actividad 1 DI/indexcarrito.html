@@ -7,41 +7,42 @@
 </head>
 <body>
 	<h1>Carrito de la compra</h1>
- 
+
 	<form>
 	<fieldset>
- 
+
 		<label for="nombre">Nombre artículo: </label>
-		<input id="nombre" type="text" name="nombre" autofocus> 
+		<input id="nombre" type="text" name="nombre" autofocus>
 		<span id="falta_articulo"></span>
- 
+
 		<br><br>
- 
+
 		<label for="precio">Precio artículo: </label>
-		<input id="precio" type="text" name="precio" autofocus> 
+		<input id="precio" type="text" name="precio" autofocus>
 		<span id="falta_precio"></span>
- 
+
 		<br><br>
- 
+
 		<label for="unidades">Unidades: </label>
 		<input id="unidades" type="number" name="unidades" value="1" autofocus>
- 
+		<span id="falta_unidades"></span>
+
 		<br><br>
- 
+
 		<input id="anadir" type="button" name="Añadir artículo" value="Añadir artículo">
- 
- 
+
+
 		<br><br><br>
- 
+
 		<label>Artículos en el carrito: </label>
 		<p id="totalArticulos"></p>
- 
- 
+
+
 		<br><br>
- 
+
 		<label>Precio total del carrito: </label>
 		<p id="totalPrecio"></p>
- 
+
 		<br><br>
  <!--Pago-->
 		<label for="pago">Forma de pago: </label>
@@ -51,7 +52,7 @@
 			<option value="efectivo">Efectivo</option>
 		</select>
 		<br><br>
-		
+
 		<div id="capaTarjeta">
 			Titular tarjeta: <input type="text" name="titularTarjeta"/><br><br>
 			Número de tarjeta: <input type="text" name="numeroTarjeta"/><br><br>
@@ -64,8 +65,8 @@
 
 		<input type="checkbox" id="condiciones" value="Y">
 		<label for="condiciones">Acepto las condiciones de compra </label>
- 
- 
+
+
 		<br><br>
 
 		<input type="submit" id="imprimir" name="imprimir" value="Imprimir" disabled="true">
