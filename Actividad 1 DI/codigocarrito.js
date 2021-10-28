@@ -118,9 +118,9 @@ function cargarPago(){
 	}	
 }
 
-//NO FUNCIONAA
+//Función que permite imprimir al aceptar condiciones
 function aceptarCondiciones(){
-	if (condiciones.value == Y){
+	if (condiciones.checked == true){
 		imprimir.disabled = false;
 	}else{
 		imprimir.disabled = true;
