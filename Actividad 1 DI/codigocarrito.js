@@ -46,8 +46,7 @@ function initVariables(){
 	errorPrecio = document.getElementById('falta_precio');
 	imprimir = document.getElementById('imprimir');
 	totalArticulos = document.getElementById('totalArticulos');
-	totalPrecio = document.getElementById('totalPrecio');	
-	imprimir = document.getElementById('imprimir');	
+	totalPrecio = document.getElementById('totalPrecio');		
 	condiciones = document.getElementById('condiciones');	
 	nombreArticulo.focus();
 	
@@ -64,7 +63,7 @@ function initVariables(){
 function initEventos(){
 	anadirCarrito.addEventListener("click", añadir);
 	imprimir.addEventListener("click", imprimirCompra);
-	condiciones.addEventListener("input", aceptarCondiciones);
+	condiciones.addEventListener("click", aceptarCondiciones);
 	pago.addEventListener("change", cargarPago);
 }
  
@@ -119,17 +118,34 @@ function cargarPago(){
 	}	
 }
 
-//NO FUNCIONAA
+//Función que permite imprimir al aceptar condiciones
 function aceptarCondiciones(){
-	if (condiciones.value == Y){
+	if (condiciones.checked == true){
 		imprimir.disabled = false;
 	}else{
 		imprimir.disabled = true;
 		}
 }
- 
+//Función para imprimir compra, falta retocar cosas
 function imprimirCompra(){
- 
+	var num=/^\d{9}$/;
+	var codigoCvv=/^\d{3}$/;
+
+	if(pago.value=="tarjeta"){
+		if(titularTarjeta.value!="" && numeroTarjeta.value!="" && cvv.value!=""){
+			if(!isNan(numeroTarjeta.value) && codigoCvv.test(cvv.value)){
+				alert("procesando datos");
+			}else{
+				alert("datos incorrectos...");
+			}
+		}else if(pago.value=="efectivo"){
+			if(importe.value!="" &&  !isNaN(importe.value)){
+				alert("procesando datos");
+			}else{
+				alert("datos de importe efectivo incorrectos");
+			}
+		}else alert("seleccione un método de pago");
+	}
 }
  
  
