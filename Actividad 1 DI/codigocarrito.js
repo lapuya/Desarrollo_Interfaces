@@ -95,8 +95,8 @@ function añadir (){
 		articulos.push(nombreArticulo.value);
 		totalArticulos.textContent = articulos + "";
  
-		//NO ME SUMA LOS PRECIOS...
-		precioTotal = (precioTotal + precioArticulo.value);
+		
+		precioTotal += (parseFloat(precioArticulo.value) * parseFloat(unidadesArticulo.value));
 		totalPrecio.textContent = precioTotal;
 	}
  
