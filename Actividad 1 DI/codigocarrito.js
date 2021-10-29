@@ -102,7 +102,11 @@ function añadir (){
 
 
 		precioTotal += (parseFloat(precioArticulo.value) * parseFloat(unidadesArticulo.value));
-		totalPrecio.textContent = precioTotal;
+		totalPrecio.value = precioTotal;
+
+    //si tuvieramos algun error
+    errorPrecio.textContent = "";
+    errorArticulo.textContent = "";
 	}
 
 
@@ -134,7 +138,7 @@ function aceptarCondiciones(){
 }
 //Función para imprimir compra, falta retocar cosas
 function imprimirCompra(){
-	var num=/^\d{9}$/;
+  var num=/^\d{9}$/;
 	var codigoCvv=/^\d{3}$/;
 
 	if(pago.value=="tarjeta"){
