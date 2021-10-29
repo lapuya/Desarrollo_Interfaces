@@ -193,7 +193,7 @@ function pagoConEfectivo()
 	else
 		alert("datos de importe efectivo incorrectos");
 }
-//Función para imprimir compra, falta retocar cosas
+//Función para imprimir compra
 function imprimirCompra(){
 	if(pago.value=="tarjeta"){
 		pagoConTarjeta();

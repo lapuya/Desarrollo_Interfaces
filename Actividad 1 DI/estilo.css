@@ -1,13 +1,22 @@
 h1{
     color: #0a00668c;
-    font-size:20px;
+    font-size:25px;
+    text-indent: 8%;
+    margin: center;
 
 }
-div{
-    background-color: rgba(199, 242, 255, 0.767);
-}
+
 body{
+    
     font-family: Verdana;
     font-size: 14px;
 }
+fieldset{
+    
+    background: linear-gradient(silver,#83aaa0);
+    margin: auto;
+    margin-right: 70%;
+}
+#totalArticulos{
+    size: 1500cm;
 }
