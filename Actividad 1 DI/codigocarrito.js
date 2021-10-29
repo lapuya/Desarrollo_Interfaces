@@ -45,7 +45,7 @@ function initVariables(){
 	formaPago = document.getElementById('pago');
 	errorArticulo = document.getElementById('falta_articulo');
 	errorPrecio = document.getElementById('falta_precio');
-  errorUnidades = document.getElementById('falta_unidades');
+  	errorUnidades = document.getElementById('falta_unidades');
 	imprimir = document.getElementById('imprimir');
 	totalArticulos = document.getElementById('totalArticulos');
 	totalPrecio = document.getElementById('totalPrecio');
@@ -71,42 +71,39 @@ function initEventos(){
 
 
 function añadir (){
-
-
 	if (nombreArticulo.value == ""){
 		errorArticulo.textContent = "Falta añadir artículo.";
 		a = false;
-	} else{
+	}else{
 		a = true;
-
 	}
 
 	if (precioArticulo.value == ""){
 		errorPrecio.textContent = "Falta añadir precio.";
 		b = false;
-  } else if (isNaN(precioArticulo.value)){
+  	}else if (isNaN(precioArticulo.value)){
 		errorPrecio.textContent = "Tipo de dato incorrecto.";
 		b = false
-	} else
-				b = true;
+	}else
+		b = true;
   //comprobar que las unidades del articulo es mayor que 0
   if (unidades.value <= 0) {
     errorUnidades.textContent = "Las unidades no pueden ser 0 o menor.";
     a = false; //ponemos 'a' falso para que no se añada al carrito
-  }
+}
 
   //Si el articulo, el precio y las unidades están bien añadimos
 	if (a && b) {
 		articulos.push(nombreArticulo.value);
-		totalArticulos.textContent = articulos + "";
+		totalArticulos.value = articulos.concat();
 
 
 		precioTotal += (parseFloat(precioArticulo.value) * parseFloat(unidadesArticulo.value));
 		totalPrecio.value = precioTotal;
 
     //si tuvieramos algun error
-    errorPrecio.textContent = "";
-    errorArticulo.textContent = "";
+    errorPrecio.textContent = "Precio erróneo";
+    errorArticulo.textContent = "Artículo erróneo";
 	}
 
 
@@ -138,7 +135,7 @@ function aceptarCondiciones(){
 }
 //Función para imprimir compra, falta retocar cosas
 function imprimirCompra(){
-  var num=/^\d{9}$/;
+  	var num=/^\d{9}$/;
 	var codigoCvv=/^\d{3}$/;
 
 	if(pago.value=="tarjeta"){
