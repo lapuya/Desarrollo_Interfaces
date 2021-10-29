@@ -102,8 +102,8 @@ function añadir (){
 		totalPrecio.value = precioTotal;
 
     //si tuvieramos algun error
-    errorPrecio.textContent = "Precio erróneo";
-    errorArticulo.textContent = "Artículo erróneo";
+    errorPrecio.textContent = "";
+    errorArticulo.textContent = "";
 	}
 
 
