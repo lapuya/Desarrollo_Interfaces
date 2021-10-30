@@ -60,8 +60,15 @@ function initVariables(){
 
 }
 
+//ch es una unidad de tamaño, como px. 
+function resizeInput()
+{
+	this.style.width = this.value.length + "ch";
+}
+
 function initEventos(){
 	anadirCarrito.addEventListener("click", añadir);
+	totalArticulos.addEventListener('input', resizeInput);
 	condiciones.addEventListener("click", aceptarCondiciones);
 	pago.addEventListener("change", cargarPago);
 	imprimir.addEventListener("click", imprimirCompra);
@@ -124,6 +131,7 @@ function añadir (){
 			articulos += ", ";
     articulos += nombreArticulo.value;
     totalArticulos.value = articulos + "";
+		resizeInput.call(totalArticulos);
 
     precioTotal += (parseFloat(precioArticulo.value) * parseFloat(unidadesArticulo.value));
     totalPrecio.value = precioTotal;

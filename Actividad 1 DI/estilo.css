@@ -7,16 +7,18 @@ h1{
 }
 
 body{
-    
+
     font-family: Verdana;
     font-size: 14px;
+    height: 1000px;
+    width: 2000px
 }
 fieldset{
-    
+
     background: linear-gradient(silver,#83aaa0);
     margin: auto;
     margin-right: 70%;
 }
 #totalArticulos{
-    size: 1500cm;
+  width:1px;
 }
