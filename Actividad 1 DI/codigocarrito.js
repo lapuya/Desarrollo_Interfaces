@@ -60,7 +60,7 @@ function initVariables(){
 
 }
 
-//ch es una unidad de tamaño, como px. 
+//ch es una unidad de tamaño, como px.
 function resizeInput()
 {
 	this.style.width = this.value.length + "ch";
@@ -196,17 +196,19 @@ function pagoConTarjeta()
 //funcion que se activa al pagar con efectivo
 function pagoConEfectivo()
 {
-	if(importe.value!="" &&  !isNaN(importe.value))
+	console.log(importeEfectivo);
+	console.log(totalPrecio);
+	if(importeEfectivo.value!="" &&  !isNaN(importeEfectivo.value) && importeEfectivo.value > totalPrecio.value)
 		alert(imprimirTodo());
 	else
-		alert("datos de importe efectivo incorrectos");
+		alert("datos de importe efectivo incorrectos o falta efectivo");
 }
 //Función para imprimir compra
 function imprimirCompra(){
 	if(pago.value=="tarjeta"){
 		pagoConTarjeta();
 	}else if(pago.value=="efectivo"){
-		pagoConEfectivo
+		pagoConEfectivo();
 	}else alert("seleccione un método de pago");
 }
 
