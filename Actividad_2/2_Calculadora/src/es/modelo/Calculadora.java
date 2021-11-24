@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import es.vista.VistaCalculadora;
 
-public class Calculadora implements ActionListener {
+public class Calculadora  {
 	
 	private float num1;
 	private float num2;
@@ -22,30 +22,24 @@ public class Calculadora implements ActionListener {
 		this.num2 = num2;
 	}
 	
-	public float suma() {
+	public Double suma(double num1, double num2) {
 		return num1 + num2;
 	}
 	
-	public float resta() {
+	public Double resta() {
 		return num1 - num2;
 	}
 	
-	public float multiplicacion() {
+	public Double multiplicacion() {
 		return num1 * num2;
 	}
 	
-	public float division() {
+	public Double division() {
 		return num1 / num2;
 	}
 
 	public double raizCubica() {
 		return Math.pow(num1, 1/3);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
