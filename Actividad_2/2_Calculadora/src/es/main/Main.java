@@ -19,6 +19,8 @@ public class Main {
 					
 		//Controlador
 		ControladorCalculadora controlador = new ControladorCalculadora(vista, modelo);
+
+		vista.setControlador(controlador);
 		
 		//arrancamos
 		vista.init();
