@@ -1,45 +1,30 @@
 package es.modelo;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class Calculadora {
 
-import javax.swing.JLabel;
-
-import es.vista.VistaCalculadora;
-
-public class Calculadora  {
-	
-	private float num1;
-	private float num2;
-	private JLabel labelResultado;
-	private VistaCalculadora ventana;
-	
-	public void setNum1 (float num1) {
-		this.num1 = num1;
-	}
-	
-	public void setNum2 (float num2) {
-		this.num2 = num2;
-	}
-	
 	public Double suma(double num1, double num2) {
+		// TODO Auto-generated method stub
 		return num1 + num2;
 	}
-	
-	public Double resta() {
+
+	public Double resta(double num1, double num2) {
 		return num1 - num2;
 	}
-	
-	public Double multiplicacion() {
+
+	public Double multiplicacion(double num1, double num2) {
 		return num1 * num2;
 	}
-	
-	public Double division() {
+
+	public Double division(double num1, double num2) {
 		return num1 / num2;
 	}
 
-	public double raizCubica() {
-		return Math.pow(num1, 1/3);
+	public double raizCubica(double num1) {
+		return Math.cbrt(num1);
+	}
+
+	public Double raizCuadrada(double num1) {
+		return Math.sqrt(num1);
 	}
 
 }
