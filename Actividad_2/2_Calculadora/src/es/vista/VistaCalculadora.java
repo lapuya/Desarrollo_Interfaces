@@ -1,464 +1,306 @@
 package es.vista;
 
-import javax.swing.JPanel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 
 import es.controlador.ControladorCalculadora;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.io.File;
+import java.awt.Image;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 
 public class VistaCalculadora extends JFrame {
 
 	private JPanelBackground contentPane;
-
-	private JButton boton0;
-	private JButton boton1;
-	private JButton boton2;
-	private JButton boton3;
-	private JButton boton4;
-	private JButton boton5;
-	private JButton boton6;
-	private JButton boton7;
-	private JButton boton8;
-	private JButton boton9;
-	private JButton botonPunto;
-	private JButton botonResultado;
-	private JButton botonCubica;
-	private JButton botonCuadrada;
+	private JTextField resultado;
+	private JTextField numeroUno;
+	private JTextField numeroDos;
 	private JButton botonSuma;
 	private JButton botonResta;
-	private JButton botonMultiplicar;
-	private JButton botonDividir;
-	private JButton botonBorrar;
-	private JButton botonLimpiar;
-	private JLabel titulo;
-	private JRadioButton botonRadioNormal;
-	private JRadioButton botonRadioGaming;
-	private JRadioButton botonRadioTroll;
-	private JPanel panelPantalla;
-	private JLabel pantalla;
+	private JButton botonRaizCuadrada;
+	private JButton botonMultiplicacion;
+	private JButton botonDivision;
+	private JButton botonRaizCubica;
+	private JLabel lblNewLabel;
+	private JRadioButton normalVersion;
+	private JRadioButton gamingVersion;
+	private boolean isGaming = false;
+	private JPanel panelBotones;
 
-	private String resultado = "0";
-	private String operacion = "";
-	private String ultimoNumero = "";
-	private boolean nuevaOperacion = false;
-	private boolean nuevoNumero = true;
-
-
-	private boolean gaming = false;
 	/**
-	 * Create the panel.
+	 * Launch the application.
+	 */
+
+	/**
+	 * Create the frame.
 	 */
 	public VistaCalculadora() {
 
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 690, 544);
+		setBounds(100, 100, 528, 519);
 		contentPane = new JPanelBackground();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		crearBotonesNumeros();
-
-		crearBotonesOperaciones();
-
-
-
-
-		titulo = new JLabel("Just a Normal Calculator :)");
-		titulo.setBounds(237, 18, 176, 42);
-		getContentPane().add(titulo);
-
-		botonRadioNormal = new JRadioButton("Normal Version");
-		botonRadioNormal.addActionListener(new ActionListener() {
+		normalVersion = new JRadioButton("Normal Version");
+		normalVersion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Me meto");
+				isGaming = false;
+				crearBotones();
+				generaPantalla();
+			}
+		});
+		normalVersion.setSelected(true);
+		normalVersion.setBounds(58, 44, 141, 23);
+		contentPane.add(normalVersion);
+
+		gamingVersion = new JRadioButton("Gaming Version");
+		gamingVersion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				contentPane.setBackground("images/pixel_screen.png");
+				isGaming = true;
+				crearBotonesGaming();
+				JOptionPane.showMessageDialog(null, "Active el sonido para mejorar la experiencia!");
+
+				playSound();
+
+
 
 			}
 		});
-		botonRadioNormal.setSelected(true);
-		botonRadioNormal.setBounds(41, 59, 141, 23);
-		getContentPane().add(botonRadioNormal);
+		gamingVersion.setBounds(312, 44, 141, 23);
+		contentPane.add(gamingVersion);
 
-		botonRadioGaming = new JRadioButton("Gaming Version");
-		botonRadioGaming.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				contentPane.setBackground("images/gaming_screen.png");
-				ImageIcon imageIcon = new ImageIcon("images/ring.png");
-				Image image = imageIcon.getImage(); // transform it
-				Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-				imageIcon = new ImageIcon(newimg);
-				//setBoton1(new JButton(imageIcon));
-				//boton1.s = new JButton(imageIcon);
-				//getContentPane().add(boton1);
-				gaming = true;
-				boton1.setText("");
-				boton2.setText("");
-				boton1.setBorderPainted(false);
-				boton2.setBorderPainted(false);
+		ButtonGroup grupo = new ButtonGroup();
+		grupo.add(normalVersion);
+		grupo.add(gamingVersion);
 
 
-				crearBotonesNumeros();
 
-			}
+		crearBotones();
+		generaPantalla();
 
-		});
-		botonRadioGaming.setBounds(261, 59, 141, 23);
-		getContentPane().add(botonRadioGaming);
-
-
-		panelPantalla = new JPanel();
-		panelPantalla.setBackground(Color.WHITE);
-		panelPantalla.setBounds(22, 110, 620, 88);
-		getContentPane().add(panelPantalla);
-		panelPantalla.setLayout(null);
-
-		pantalla = new JLabel(resultado);
-		pantalla.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		pantalla.setHorizontalAlignment(SwingConstants.RIGHT);
-		pantalla.setBounds(6, 6, 608, 74);
-		panelPantalla.add(pantalla);
 
 	}
 
-	private void crearBotonesOperaciones() {
-		// TODO Auto-generated method stub
-
-		botonPunto = new JButton(".");
-		botonPunto.setBounds(525, 385, 117, 29);
-		getContentPane().add(botonPunto);
-		botonPunto.setActionCommand(".");
-
-
-		botonResultado = new JButton("=");
-		botonResultado.setBounds(525, 262, 117, 29);
-		getContentPane().add(botonResultado);
-		botonResultado.setActionCommand("=");
+	private void generaPantalla() {
+		JPanel panelPantalla = new JPanel();
+		panelPantalla.setBounds(44, 112, 227, 273);
+		contentPane.add(panelPantalla);
+		panelPantalla.setLayout(null);
+		panelPantalla.setOpaque(false);
 
 
+		resultado = new JTextField("");
+		resultado.setEditable(false);
+		resultado.setHorizontalAlignment(SwingConstants.CENTER);
+		resultado.setBounds(6, 194, 215, 59);
+		panelPantalla.add(resultado);
+		resultado.setColumns(10);
 
-		botonCubica = new JButton("∛");
-		botonCubica.setBounds(146, 385, 117, 29);
-		getContentPane().add(botonCubica);
-		botonCubica.setActionCommand("∛");
+
+		numeroUno = new JTextField("Ingrese el numero 1");
+
+		numeroUno.setHorizontalAlignment(SwingConstants.CENTER);
+		numeroUno.setColumns(10);
+		numeroUno.setBounds(6, 24, 215, 59);
+		panelPantalla.add(numeroUno);
+		numeroUno.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (numeroUno.getText().equals("Ingrese el numero 1")) {
+					numeroUno.setText("");
+					if (isGaming)
+						playButton("sound_effects/mouse.wav");
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (numeroUno.getText().equals("")) {
+					numeroUno.setText("Ingrese el numero 1");
+				}
+			}
+		});
+		numeroUno.setOpaque(false);
+
+		numeroDos = new JTextField("Ingrese el numero 2");
+		numeroDos.setHorizontalAlignment(SwingConstants.CENTER);
+		numeroDos.setColumns(10);
+		numeroDos.setBounds(6, 111, 215, 59);
+		panelPantalla.add(numeroDos);
+
+		lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(216, 17, 61, 16);
+		contentPane.add(lblNewLabel);
 
 
-		botonCuadrada = new JButton("√");
-		botonCuadrada.setBounds(278, 385, 117, 29);
-		getContentPane().add(botonCuadrada);
-		botonCuadrada.setActionCommand("√");
+		numeroDos.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (numeroDos.getText().equals("Ingrese el numero 2")) {
+					numeroDos.setText("");
+					if (isGaming)
+						playButton("sound_effects/mouse.wav");
+
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (numeroDos.getText().equals("")) {
+					numeroDos.setText("Ingrese el numero 2");
+				}
+			}
+		});
+
+	}
+
+	private void crearBotones() {
+		panelBotones = new JPanel();
+		panelBotones.setBounds(295, 112, 176, 273);
+		contentPane.add(panelBotones);
+		panelBotones.setLayout(null);
+		panelBotones.setOpaque(false);
 
 
 		botonSuma = new JButton("+");
-		botonSuma.setBounds(406, 262, 117, 29);
-		getContentPane().add(botonSuma);
+		botonSuma.setBounds(6, 20, 75, 71);
+		panelBotones.add(botonSuma);
 		botonSuma.setActionCommand("+");
 
-
 		botonResta = new JButton("-");
-		botonResta.setBounds(407, 303, 117, 29);
-		getContentPane().add(botonResta);
+		botonResta.setBounds(6, 103, 75, 71);
+		panelBotones.add(botonResta);
 		botonResta.setActionCommand("-");
 
 
-		botonMultiplicar = new JButton("x");
-		botonMultiplicar.setBounds(407, 344, 117, 29);
-		getContentPane().add(botonMultiplicar);
-		botonMultiplicar.setActionCommand("x");
+		botonRaizCuadrada = new JButton("√");
+		botonRaizCuadrada.setBounds(6, 186, 75, 71);
+		panelBotones.add(botonRaizCuadrada);
+		botonRaizCuadrada.setActionCommand("√");
 
 
-		botonDividir = new JButton("/");
-		botonDividir.setBounds(406, 385, 117, 29);
-		getContentPane().add(botonDividir);
-		botonDividir.setActionCommand("/");
+		botonMultiplicacion = new JButton("x");
+		botonMultiplicacion.setBounds(93, 20, 75, 71);
+		panelBotones.add(botonMultiplicacion);
+
+		botonMultiplicacion.setActionCommand("x");
 
 
-		botonBorrar = new JButton("DEL");
-		botonBorrar.setBounds(525, 303, 117, 29);
-		getContentPane().add(botonBorrar);
-		botonBorrar.setActionCommand("delete");
+		botonDivision = new JButton("/");
+		botonDivision.setBounds(93, 103, 75, 71);
+		panelBotones.add(botonDivision);
+		botonDivision.setActionCommand("/");
 
 
-		botonLimpiar = new JButton("CLEAN");
-		botonLimpiar.setBounds(525, 344, 117, 29);
-		getContentPane().add(botonLimpiar);
-		botonLimpiar.setActionCommand("clean");
 
+
+		botonRaizCubica = new JButton("∛");
+		botonRaizCubica.setBounds(93, 186, 78, 71);
+		panelBotones.add(botonRaizCubica);
+		botonRaizCubica	.setActionCommand("∛");
 	}
 
-	private void crearBotonesNumeros() {
+	private void crearBotonesGaming() {
 		// TODO Auto-generated method stub
-		boton0 = new JButton("0");
-		boton0.setBounds(17, 385, 117, 29);
-		getContentPane().add(boton0);
-		boton0.setActionCommand("cero");
 
-		if (gaming) {
-			System.out.println("me meto");
-			ImageIcon imageIcon = new ImageIcon("images/ring.png");
-			Image image = imageIcon.getImage(); // transform it
-			Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-			imageIcon = new ImageIcon(newimg);
-			boton1 = new JButton(imageIcon);
-			boton1.setBounds(17, 344, 117, 29);
-			boton1.setBorderPainted(false);
-			System.out.println("text: " + boton1.getText());
-			contentPane.add(boton1);
-		} else {
-			System.out.println("aqui no");
-			boton1 = new JButton("1");
-			boton1.setActionCommand("uno");
-			boton1.setBounds(17, 344, 117, 29);
-			contentPane.add(boton1);
-
-		}
-		if (gaming) {
-			System.out.println("me meto");
-			ImageIcon imageIcon = new ImageIcon("images/apple_2.png");
-			Image image = imageIcon.getImage(); // transform it
-			Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-			imageIcon = new ImageIcon(newimg);
-			boton2 = new JButton(imageIcon);
-			boton2.setBounds(149, 344, 117, 29);
-			boton2.setBorderPainted(false);
-			contentPane.add(boton2);
-		} else {
-			boton2 = new JButton("2");
-			boton2.setBounds(149, 344, 117, 29);
-			getContentPane().add(boton2);
-			boton2.setActionCommand("dos");
-
-			}
-
-
-		boton3 = new JButton("3");
-		boton3.setBounds(278, 344, 117, 29);
-		getContentPane().add(boton3);
-		boton3.setActionCommand("tres");
-
-
-		boton4 = new JButton("4");
-		boton4.setBounds(17, 303, 117, 29);
-		getContentPane().add(boton4);
-		boton4.setActionCommand("cuatro");
-
-
-		boton5 = new JButton("5");
-		boton5.setBounds(149, 303, 117, 29);
-		getContentPane().add(boton5);
-		boton5.setActionCommand("cinco");
-
-
-		boton6 = new JButton("6");
-		boton6.setBounds(278, 303, 117, 29);
-		getContentPane().add(boton6);
-		boton6.setActionCommand("seis");
-
-
-		boton7 = new JButton("7");
-		boton7.setBounds(17, 262, 117, 29);
-		getContentPane().add(boton7);
-		boton7.setActionCommand("siete");
-
-
-		boton8 = new JButton("8");
-		boton8.setBounds(149, 262, 117, 29);
-		getContentPane().add(boton8);
-		boton8.setActionCommand("ocho");
-
-
-		boton9 = new JButton("9");
-		boton9.setBounds(278, 262, 117, 29);
-		getContentPane().add(boton9);
-		boton9.setActionCommand("nueve");
-
+		cambiarBotonAGaming(botonSuma, "images/pocion_suma.png");
+		cambiarBotonAGaming(botonResta, "images/daga_resta.png");
+		cambiarBotonAGaming(botonMultiplicacion, "images/pocion_mult.png");
+		cambiarBotonAGaming(botonDivision, "images/cazuela_division.png");
+		cambiarBotonAGaming(botonRaizCuadrada, "images/antorcha_sqrt.png");
+		cambiarBotonAGaming(botonRaizCubica, "images/fuego_cubico.png");
 
 	}
 
-	protected void loadGaming() {
+	private void cambiarBotonAGaming(JButton b, String path) {
+		ImageIcon imageIcon = new ImageIcon(path);
+		Image image = imageIcon.getImage(); // transform it
+		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+		imageIcon = new ImageIcon(newimg);
+		b.setText("");
+		b.setIcon(imageIcon);
+		b.setBorderPainted(false);
+	}
 
-		//JLabel background = new JLabel (new ImageIcon("images/screen.png"));
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 750, 475);
-		setLocationRelativeTo(null);
-		contentPane = new JPanelBackground();
-		contentPane.setBackground("images/screen.png");
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
-		boton0 = new JButton("0");
-		boton0.setBounds(17, 385, 117, 29);
-		getContentPane().add(boton0);
-		boton0.setActionCommand("cero");
-
-
-		boton1 = new JButton("1");
-		boton1.setActionCommand("uno");
-		boton1.setBounds(17, 344, 117, 29);
-		getContentPane().add(boton1);
-
-		boton2 = new JButton("2");
-		boton2.setBounds(149, 344, 117, 29);
-		getContentPane().add(boton2);
-		boton2.setActionCommand("dos");
-
-
-		boton3 = new JButton("3");
-		boton3.setBounds(278, 344, 117, 29);
-		getContentPane().add(boton3);
-		boton3.setActionCommand("tres");
-
-
-		boton4 = new JButton("4");
-		boton4.setBounds(17, 303, 117, 29);
-		getContentPane().add(boton4);
-		boton4.setActionCommand("cuatro");
-
-
-		boton5 = new JButton("5");
-		boton5.setBounds(149, 303, 117, 29);
-		getContentPane().add(boton5);
-		boton5.setActionCommand("cinco");
-
-
-		boton6 = new JButton("6");
-		boton6.setBounds(278, 303, 117, 29);
-		getContentPane().add(boton6);
-		boton6.setActionCommand("seis");
-
-
-		boton7 = new JButton("7");
-		boton7.setBounds(17, 262, 117, 29);
-		getContentPane().add(boton7);
-		boton7.setActionCommand("siete");
-
-
-		boton8 = new JButton("8");
-		boton8.setBounds(149, 262, 117, 29);
-		getContentPane().add(boton8);
-		boton8.setActionCommand("ocho");
-
-
-		boton9 = new JButton("9");
-		boton9.setBounds(278, 262, 117, 29);
-		getContentPane().add(boton9);
-		boton9.setActionCommand("nueve");
-
-
-		botonPunto = new JButton(".");
-		botonPunto.setBounds(525, 385, 117, 29);
-		getContentPane().add(botonPunto);
-		botonPunto.setActionCommand(".");
-
-
-		botonResultado = new JButton("=");
-		botonResultado.setBounds(525, 262, 117, 29);
-		getContentPane().add(botonResultado);
-		botonResultado.setActionCommand("=");
-
-
-
-		botonCubica = new JButton("∛");
-		botonCubica.setBounds(146, 385, 117, 29);
-		getContentPane().add(botonCubica);
-		botonCubica.setActionCommand("∛");
-
-
-		botonCuadrada = new JButton("√");
-		botonCuadrada.setBounds(278, 385, 117, 29);
-		getContentPane().add(botonCuadrada);
-		botonCuadrada.setActionCommand("√");
+	private void crearBotonesNormales() {
+		// TODO Auto-generated method stub
+		panelBotones = new JPanel();
+		panelBotones.setBounds(295, 79, 317, 273);
+		contentPane.add(panelBotones);
+		panelBotones.setLayout(null);
+		panelBotones.setOpaque(false);
 
 
 		botonSuma = new JButton("+");
-		botonSuma.setBounds(406, 262, 117, 29);
-		getContentPane().add(botonSuma);
+		botonSuma.setBounds(6, 20, 145, 71);
+		panelBotones.add(botonSuma);
 		botonSuma.setActionCommand("+");
 
-
 		botonResta = new JButton("-");
-		botonResta.setBounds(407, 303, 117, 29);
-		getContentPane().add(botonResta);
+		botonResta.setBounds(6, 103, 145, 71);
+		panelBotones.add(botonResta);
 		botonResta.setActionCommand("-");
 
 
-		botonMultiplicar = new JButton("x");
-		botonMultiplicar.setBounds(407, 344, 117, 29);
-		getContentPane().add(botonMultiplicar);
-		botonMultiplicar.setActionCommand("x");
+		botonRaizCuadrada = new JButton("√");
+		botonRaizCuadrada.setBounds(6, 186, 145, 71);
+		panelBotones.add(botonRaizCuadrada);
+		botonRaizCuadrada.setActionCommand("√");
 
 
-		botonDividir = new JButton("/");
-		botonDividir.setBounds(406, 385, 117, 29);
-		getContentPane().add(botonDividir);
-		botonDividir.setActionCommand("/");
+		botonMultiplicacion = new JButton();
+		botonMultiplicacion.setText("");
+		botonMultiplicacion.setBounds(166, 20, 145, 71);
+		panelBotones.add(botonMultiplicacion);
+		botonMultiplicacion.setBorderPainted(false);
+
+		botonMultiplicacion.setActionCommand("x");
 
 
-		botonBorrar = new JButton("DEL");
-		botonBorrar.setBounds(525, 303, 117, 29);
-		getContentPane().add(botonBorrar);
-		botonBorrar.setActionCommand("delete");
+		botonDivision = new JButton("/");
+		botonDivision.setBounds(163, 103, 145, 71);
+		panelBotones.add(botonDivision);
+		botonDivision.setActionCommand("/");
 
 
-		botonLimpiar = new JButton("CLEAN");
-		botonLimpiar.setBounds(525, 344, 117, 29);
-		getContentPane().add(botonLimpiar);
-		botonLimpiar.setActionCommand("clean");
+		botonRaizCubica = new JButton("∛");
+		botonRaizCubica.setBounds(163, 186, 145, 71);
+		panelBotones.add(botonRaizCubica);
+		botonRaizCubica	.setActionCommand("∛");
 
+	}
 
-		titulo = new JLabel("Just a Normal Calculator :)");
-		titulo.setBounds(237, 18, 176, 42);
-		getContentPane().add(titulo);
-
-		botonRadioNormal = new JRadioButton("Normal Version");
-		botonRadioNormal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
-		botonRadioNormal.setBounds(41, 59, 141, 23);
-		getContentPane().add(botonRadioNormal);
-
-		botonRadioGaming = new JRadioButton("Gaming Version");
-		botonRadioGaming.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				loadGaming();
-			}
-		});
-		botonRadioGaming.setBounds(261, 59, 141, 23);
-		getContentPane().add(botonRadioGaming);
-
-		botonRadioTroll = new JRadioButton("TrollVersion");
-		botonRadioTroll.setBounds(508, 59, 141, 23);
-		getContentPane().add(botonRadioTroll);
-
-		panelPantalla = new JPanel();
-		panelPantalla.setBackground(Color.WHITE);
-		panelPantalla.setBounds(22, 110, 620, 88);
-		getContentPane().add(panelPantalla);
-		panelPantalla.setLayout(null);
-
-		pantalla = new JLabel(resultado);
-		pantalla.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		pantalla.setHorizontalAlignment(SwingConstants.RIGHT);
-		pantalla.setBounds(6, 6, 608, 74);
-		panelPantalla.add(pantalla);
-
-
-
+	public void setControlador(ControladorCalculadora controlador) {
+		// TODO Auto-generated method stub
+		botonSuma.addActionListener(controlador);
+		botonResta.addActionListener(controlador);
+		botonMultiplicacion.addActionListener(controlador);
+		botonDivision.addActionListener(controlador);
+		botonRaizCuadrada.addActionListener(controlador);
+		botonRaizCubica.addActionListener(controlador);
 	}
 
 	public void init() {
@@ -468,82 +310,82 @@ public class VistaCalculadora extends JFrame {
 
 	}
 
-	public void setControlador(ControladorCalculadora c) {
-		boton0.addActionListener(c);
-		boton1.addActionListener(c);
-		boton2.addActionListener(c);
-		boton3.addActionListener(c);
-		boton4.addActionListener(c);
-		boton5.addActionListener(c);
-		boton6.addActionListener(c);
-		boton7.addActionListener(c);
-		boton8.addActionListener(c);
-		boton9.addActionListener(c);
-		botonPunto.addActionListener(c);
-		botonResultado.addActionListener(c);
-		botonCubica.addActionListener(c);
-		botonCuadrada.addActionListener(c);
-		botonSuma.addActionListener(c);
-		botonResta.addActionListener(c);
-		botonMultiplicar.addActionListener(c);
-		botonDividir.addActionListener(c);
-		botonBorrar.addActionListener(c);
-		botonLimpiar.addActionListener(c);
-		botonResultado.addActionListener(c);
+	public String getResultado() {
+		return resultado.getText();
 	}
 
-	public void setPantalla(String value) {
+	public void setResultado(String resultado) {
+		this.resultado.setText(resultado);;
+	}
+
+	public String getNumeroUno() {
+		return numeroUno.getText();
+	}
+
+	public void setNumeroUno(String numeroUno) {
+		this.numeroUno.setText(numeroUno);
+	}
+
+	public String getNumeroDos() {
+		return numeroDos.getText();
+	}
+
+	public void setNumeroDos(String numeroDos) {
+		this.numeroDos.setText(numeroDos);
+	}
+
+	public String getContraseña() {
 		// TODO Auto-generated method stub
-		pantalla.setText(value);
+		return JOptionPane.showInputDialog("Contraseña");
 	}
 
-	public void setUltimoNumero(String numero) {
-		ultimoNumero = numero;
-
-	}
-
-	public String getUltimoNumero() {
-		// TODO Auto-generated method stub
-		return ultimoNumero;
-	}
-
-	public void setOperacion(String op) {
-		// TODO Auto-generated method stub
-		operacion = op;
+	public void showIncorrectPassword() {
+		JOptionPane.showMessageDialog(new JFrame(), "Contraseña incorrecta", "Raiz Cubica",
+		        JOptionPane.ERROR_MESSAGE);
 
 	}
 
-	public void setNuevaOperacion(boolean b) {
-		nuevaOperacion =  b;
+	public void showNumberIncorrect() {
+		JOptionPane.showMessageDialog(new JFrame(), "Los campos son incorrectos. Por favor, introduzca dos números.", "Error",
+		        JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void showSqrtError() {
+		JOptionPane.showMessageDialog(new JFrame(), "Funcionalidad no disponible", "Raiz Cuadrada",
+		        JOptionPane.ERROR_MESSAGE);
 
 	}
 
-	public boolean getNuevaOperacion() {
-		// TODO Auto-generated method stub
-		return nuevaOperacion;
+	public void playSound() {
+	    try {
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("sound_effects/8bit_music.wav").getAbsoluteFile());
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioInputStream);
+	        clip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+	}
+	public void playButton(String path) {
+		try {
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(path).getAbsoluteFile());
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioInputStream);
+	        clip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
 	}
 
-	public String getOperacion() {
-		// TODO Auto-generated method stub
-		return operacion;
+	public boolean isGaming() {
+		return isGaming;
 	}
 
-	public boolean isNuevoNumero() {
-		return nuevoNumero;
+	public void setGaming(boolean isGaming) {
+		this.isGaming = isGaming;
 	}
-
-	public void setNuevoNumero(boolean nuevoNumero) {
-		this.nuevoNumero = nuevoNumero;
-	}
-
-	public JButton getBoton1() {
-		return boton1;
-	}
-
-	public void setBoton1(JButton boton1) {
-		this.boton1 = boton1;
-	}
-
 
 
 }
