@@ -28,6 +28,7 @@ import java.awt.Image;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import java.awt.Window.Type;
 
 public class VistaCalculadora extends JFrame {
 
@@ -41,7 +42,7 @@ public class VistaCalculadora extends JFrame {
 	private JButton botonMultiplicacion;
 	private JButton botonDivision;
 	private JButton botonRaizCubica;
-	private JLabel lblNewLabel;
+	private JLabel Titulo;
 	private JRadioButton normalVersion;
 	private JRadioButton gamingVersion;
 	private boolean isGaming = false;
@@ -59,12 +60,18 @@ public class VistaCalculadora extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 528, 519);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("images/icono_calculadora.png"));
+		setTitle("                \t\t       Nuestra humilde calculadora");
 		contentPane = new JPanelBackground();
+		contentPane.setBackground("images/fondo.png");
+		//contentPane.setBackground(SystemColor.inactiveCaptionBorder);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		normalVersion = new JRadioButton("Normal Version");
+		normalVersion.setOpaque(false);
+		normalVersion.setBackground(SystemColor.activeCaptionBorder);
 		normalVersion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Me meto");
@@ -78,6 +85,8 @@ public class VistaCalculadora extends JFrame {
 		contentPane.add(normalVersion);
 
 		gamingVersion = new JRadioButton("Gaming Version");
+		gamingVersion.setOpaque(false);
+		gamingVersion.setBackground(SystemColor.activeCaptionBorder);
 		gamingVersion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				contentPane.setBackground("images/pixel_screen.png");
@@ -115,6 +124,8 @@ public class VistaCalculadora extends JFrame {
 
 
 		resultado = new JTextField("");
+		resultado.setFont(new Font("SansSerif", Font.BOLD, 20));
+		resultado.setOpaque(false);
 		resultado.setEditable(false);
 		resultado.setHorizontalAlignment(SwingConstants.CENTER);
 		resultado.setBounds(6, 194, 215, 59);
@@ -123,6 +134,7 @@ public class VistaCalculadora extends JFrame {
 
 
 		numeroUno = new JTextField("Ingrese el numero 1");
+		numeroUno.setFont(new Font("Tahoma", Font.PLAIN, 15));
 
 		numeroUno.setHorizontalAlignment(SwingConstants.CENTER);
 		numeroUno.setColumns(10);
@@ -147,14 +159,18 @@ public class VistaCalculadora extends JFrame {
 		numeroUno.setOpaque(false);
 
 		numeroDos = new JTextField("Ingrese el numero 2");
+		numeroDos.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		numeroDos.setOpaque(false);
 		numeroDos.setHorizontalAlignment(SwingConstants.CENTER);
 		numeroDos.setColumns(10);
 		numeroDos.setBounds(6, 111, 215, 59);
 		panelPantalla.add(numeroDos);
 
-		lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(216, 17, 61, 16);
-		contentPane.add(lblNewLabel);
+		Titulo = new JLabel("iCalculadora");
+		Titulo.setFont(new Font("Trebuchet MS", Font.BOLD, 13));
+		Titulo.setHorizontalAlignment(SwingConstants.CENTER);
+		Titulo.setBounds(155, 17, 162, 16);
+		contentPane.add(Titulo);
 
 
 		numeroDos.addFocusListener(new FocusAdapter() {
@@ -186,23 +202,31 @@ public class VistaCalculadora extends JFrame {
 
 
 		botonSuma = new JButton("+");
+		botonSuma.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		botonSuma.setBackground(SystemColor.scrollbar);
 		botonSuma.setBounds(6, 20, 75, 71);
 		panelBotones.add(botonSuma);
 		botonSuma.setActionCommand("+");
 
 		botonResta = new JButton("-");
+		botonResta.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		botonResta.setBackground(SystemColor.scrollbar);
 		botonResta.setBounds(6, 103, 75, 71);
 		panelBotones.add(botonResta);
 		botonResta.setActionCommand("-");
 
 
 		botonRaizCuadrada = new JButton("√");
+		botonRaizCuadrada.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		botonRaizCuadrada.setBackground(SystemColor.scrollbar);
 		botonRaizCuadrada.setBounds(6, 186, 75, 71);
 		panelBotones.add(botonRaizCuadrada);
 		botonRaizCuadrada.setActionCommand("√");
 
 
 		botonMultiplicacion = new JButton("x");
+		botonMultiplicacion.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		botonMultiplicacion.setBackground(SystemColor.scrollbar);
 		botonMultiplicacion.setBounds(93, 20, 75, 71);
 		panelBotones.add(botonMultiplicacion);
 
@@ -210,6 +234,8 @@ public class VistaCalculadora extends JFrame {
 
 
 		botonDivision = new JButton("/");
+		botonDivision.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		botonDivision.setBackground(SystemColor.scrollbar);
 		botonDivision.setBounds(93, 103, 75, 71);
 		panelBotones.add(botonDivision);
 		botonDivision.setActionCommand("/");
@@ -217,10 +243,13 @@ public class VistaCalculadora extends JFrame {
 
 
 
-		botonRaizCubica = new JButton("∛");
+		botonRaizCubica = new JButton("√³");
+		botonRaizCubica.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage("images/raiz_cubica.png")); intentando poner icono, ya que no coge el símbolo
+		botonRaizCubica.setBackground(SystemColor.scrollbar);
 		botonRaizCubica.setBounds(93, 186, 78, 71);
 		panelBotones.add(botonRaizCubica);
-		botonRaizCubica	.setActionCommand("∛");
+		botonRaizCubica .setActionCommand("∛");
 	}
 
 	private void crearBotonesGaming() {
