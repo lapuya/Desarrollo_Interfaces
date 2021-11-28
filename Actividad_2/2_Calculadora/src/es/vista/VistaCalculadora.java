@@ -5,7 +5,6 @@ package es.vista;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 
 import es.controlador.ControladorCalculadora;
@@ -28,7 +27,6 @@ import java.awt.Image;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
-import java.awt.Window.Type;
 
 public class VistaCalculadora extends JFrame {
 
@@ -47,72 +45,38 @@ public class VistaCalculadora extends JFrame {
 	private JRadioButton gamingVersion;
 	private boolean isGaming = false;
 	private JPanel panelBotones;
+	private JLabel vidaRestanteLabel;
+	private JLabel vidaRestanteValor;
 
-	/**
-	 * Launch the application.
-	 */
+	AudioInputStream audioInputStream;
 
-	/**
-	 * Create the frame.
-	 */
+	Clip clip;
+
 	public VistaCalculadora() {
-
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 528, 519);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("images/icono_calculadora.png"));
 		setTitle("                \t\t       Nuestra humilde calculadora");
+		setResizable(false);
 		contentPane = new JPanelBackground();
 		contentPane.setBackground("images/fondo.png");
 		//contentPane.setBackground(SystemColor.inactiveCaptionBorder);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
-		normalVersion = new JRadioButton("Normal Version");
-		normalVersion.setOpaque(false);
-		normalVersion.setBackground(SystemColor.activeCaptionBorder);
-		normalVersion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Me meto");
-				isGaming = false;
-				crearBotones();
-				generaPantalla();
-			}
-		});
-		normalVersion.setSelected(true);
-		normalVersion.setBounds(58, 44, 141, 23);
-		contentPane.add(normalVersion);
-
-		gamingVersion = new JRadioButton("Gaming Version");
-		gamingVersion.setOpaque(false);
-		gamingVersion.setBackground(SystemColor.activeCaptionBorder);
-		gamingVersion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				contentPane.setBackground("images/pixel_screen.png");
-				isGaming = true;
-				crearBotonesGaming();
-				JOptionPane.showMessageDialog(null, "Active el sonido para mejorar la experiencia!");
-
-				playSound();
-
-
-
-			}
-		});
-		gamingVersion.setBounds(312, 44, 141, 23);
-		contentPane.add(gamingVersion);
-
-		ButtonGroup grupo = new ButtonGroup();
-		grupo.add(normalVersion);
-		grupo.add(gamingVersion);
-
-
-
 		crearBotones();
 		generaPantalla();
 
+		vidaRestanteLabel = new JLabel("Vidas restantes:");
+		vidaRestanteLabel.setBounds(200,16,100,16);
+		contentPane.add(vidaRestanteLabel);
+		vidaRestanteLabel.setVisible(false);
 
+
+		vidaRestanteValor = new JLabel("3");
+		vidaRestanteValor.setBounds(304,16,16,16);
+		contentPane.add(vidaRestanteValor);
+		vidaRestanteValor.setVisible(false);
 	}
 
 	private void generaPantalla() {
@@ -166,11 +130,11 @@ public class VistaCalculadora extends JFrame {
 		numeroDos.setBounds(6, 111, 215, 59);
 		panelPantalla.add(numeroDos);
 
-		Titulo = new JLabel("iCalculadora");
+		/*Titulo = new JLabel("iCalculadora");
 		Titulo.setFont(new Font("Trebuchet MS", Font.BOLD, 13));
 		Titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		Titulo.setBounds(155, 17, 162, 16);
-		contentPane.add(Titulo);
+		contentPane.add(Titulo);*/
 
 
 		numeroDos.addFocusListener(new FocusAdapter() {
@@ -191,6 +155,64 @@ public class VistaCalculadora extends JFrame {
 			}
 		});
 
+		normalVersion = new JRadioButton("Normal Version");
+		normalVersion.setOpaque(false);
+		normalVersion.setBackground(SystemColor.activeCaptionBorder);
+		normalVersion.setSelected(true);
+		normalVersion.setBounds(58, 44, 141, 23);
+		contentPane.add(normalVersion);
+
+		gamingVersion = new JRadioButton("Arcade Version");
+		gamingVersion.setOpaque(false);
+		gamingVersion.setBackground(SystemColor.activeCaptionBorder);
+		gamingVersion.setBounds(312, 44, 141, 23);
+		contentPane.add(gamingVersion);
+
+		ButtonGroup grupo = new ButtonGroup();
+		grupo.add(normalVersion);
+		grupo.add(gamingVersion);
+
+		//ACTION LISTENER DE GAMING ------------------------------------------------------------------------------
+		gamingVersion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!isGaming) {
+					contentPane.setBackground("images/pixel_screen.png");
+					isGaming = true;
+					crearBotonesGaming();
+					resultado.setText("");
+					vidaRestanteLabel.setVisible(true);
+					vidaRestanteValor.setVisible(true);
+					JOptionPane.showMessageDialog(null, "Version Arcade!\n-Operacion de suma aumenta 1 punto de vida"
+							+ "\n-Multiplicación 2 de vida\n-Resta quita 1 vida\n-División quita 2 vidas"
+							+ "\n-Pierdes al quedarte sin vidas y la calculadora se cerrará.!"
+							+ "\n-Raiz cubica quita 3 vidas\nActive el sonido para mejorar la experiencia!");
+					try {
+				        audioInputStream = AudioSystem.getAudioInputStream(new File("sound_effects/8bit_music.wav").getAbsoluteFile());
+				        clip = AudioSystem.getClip();
+						clip.open(audioInputStream);
+						clip.start();
+					} catch(Exception ex) {
+						System.out.println("Error with playing sound.");
+						}
+					}
+				}
+		});
+
+				//ACTION LSITENER VERSION NORMAL -------------------------------------------------------------------------
+		normalVersion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clip.stop();
+				contentPane.setBackground("images/fondo.png");
+				isGaming = false;
+				vidaRestanteLabel.setVisible(false);
+				vidaRestanteValor.setVisible(false);
+				vidaRestanteValor.setText("3");
+				resultado.setText("");
+
+
+				setBotonesNormales();
+			}
+		});
 	}
 
 	private void crearBotones() {
@@ -253,15 +275,12 @@ public class VistaCalculadora extends JFrame {
 	}
 
 	private void crearBotonesGaming() {
-		// TODO Auto-generated method stub
-
 		cambiarBotonAGaming(botonSuma, "images/pocion_suma.png");
 		cambiarBotonAGaming(botonResta, "images/daga_resta.png");
 		cambiarBotonAGaming(botonMultiplicacion, "images/pocion_mult.png");
 		cambiarBotonAGaming(botonDivision, "images/cazuela_division.png");
 		cambiarBotonAGaming(botonRaizCuadrada, "images/antorcha_sqrt.png");
 		cambiarBotonAGaming(botonRaizCubica, "images/fuego_cubico.png");
-
 	}
 
 	private void cambiarBotonAGaming(JButton b, String path) {
@@ -269,56 +288,53 @@ public class VistaCalculadora extends JFrame {
 		Image image = imageIcon.getImage(); // transform it
 		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
 		imageIcon = new ImageIcon(newimg);
-		b.setText("");
 		b.setIcon(imageIcon);
+		b.setText("");
 		b.setBorderPainted(false);
+		b.setOpaque(false);
 	}
 
-	private void crearBotonesNormales() {
-		// TODO Auto-generated method stub
-		panelBotones = new JPanel();
-		panelBotones.setBounds(295, 79, 317, 273);
-		contentPane.add(panelBotones);
-		panelBotones.setLayout(null);
-		panelBotones.setOpaque(false);
+	private void setBotonesNormales() {
+		botonSuma.setText("+");
+		botonResta.setText("-");
+		botonMultiplicacion.setText("x");
+		botonDivision.setText("/");
+		botonRaizCuadrada.setText("√");
+		botonRaizCubica.setText("√³");
+		cambiarBotonesNormales(botonSuma);
+		cambiarBotonesNormales(botonResta);
+		cambiarBotonesNormales(botonMultiplicacion);
+		cambiarBotonesNormales(botonDivision);
+		cambiarBotonesNormales(botonRaizCuadrada);
+		cambiarBotonesNormales(botonRaizCubica);
 
+	}
 
-		botonSuma = new JButton("+");
-		botonSuma.setBounds(6, 20, 145, 71);
-		panelBotones.add(botonSuma);
-		botonSuma.setActionCommand("+");
+	private void cambiarBotonesNormales(JButton b) {
+		switch (b.getText()) {
+			case "+":
+				b.setText("+");
+				break;
+			case "-":
+				b.setText("-");
+				break;
+			case "x":
+				b.setText("x");
+				break;
+			case "/":
+				b.setText("/");
+				break;
+			case "√":
+				b.setText("√");
+				break;
+			case "∛":
+				b.setText("∛");
+				break;
 
-		botonResta = new JButton("-");
-		botonResta.setBounds(6, 103, 145, 71);
-		panelBotones.add(botonResta);
-		botonResta.setActionCommand("-");
+		}
+		b.setIcon(null);
+		b.setOpaque(true);
 
-
-		botonRaizCuadrada = new JButton("√");
-		botonRaizCuadrada.setBounds(6, 186, 145, 71);
-		panelBotones.add(botonRaizCuadrada);
-		botonRaizCuadrada.setActionCommand("√");
-
-
-		botonMultiplicacion = new JButton();
-		botonMultiplicacion.setText("");
-		botonMultiplicacion.setBounds(166, 20, 145, 71);
-		panelBotones.add(botonMultiplicacion);
-		botonMultiplicacion.setBorderPainted(false);
-
-		botonMultiplicacion.setActionCommand("x");
-
-
-		botonDivision = new JButton("/");
-		botonDivision.setBounds(163, 103, 145, 71);
-		panelBotones.add(botonDivision);
-		botonDivision.setActionCommand("/");
-
-
-		botonRaizCubica = new JButton("∛");
-		botonRaizCubica.setBounds(163, 186, 145, 71);
-		panelBotones.add(botonRaizCubica);
-		botonRaizCubica	.setActionCommand("∛");
 
 	}
 
@@ -393,18 +409,17 @@ public class VistaCalculadora extends JFrame {
 	        clip.start();
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
 	    }
 	}
 	public void playButton(String path) {
 		try {
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(path).getAbsoluteFile());
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
+	        AudioInputStream audioInputStreamButton = AudioSystem.getAudioInputStream(new File(path).getAbsoluteFile());
+	        Clip clipButton = AudioSystem.getClip();
+	        clipButton.open(audioInputStreamButton);
+	        clipButton.start();
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
+	        //ex.printStackTrace();
 	    }
 	}
 
@@ -416,5 +431,17 @@ public class VistaCalculadora extends JFrame {
 		this.isGaming = isGaming;
 	}
 
+	public String getVidaRestanteValor() {
+		return vidaRestanteValor.getText();
+	}
 
+	public void setVidaRestanteValor(String valor) {
+		this.vidaRestanteValor.setText(valor);
+	}
+
+	public void endProgram() {
+		// TODO Auto-generated method stub
+		JOptionPane.showMessageDialog(null, "Se ha quedado sin vidas. Gracias por jugar :)");
+		System.exit(0);
+	}
 }
