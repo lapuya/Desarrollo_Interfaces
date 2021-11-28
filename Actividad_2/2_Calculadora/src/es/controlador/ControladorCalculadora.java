@@ -93,7 +93,7 @@ public class ControladorCalculadora implements ActionListener {
 					break;
 			}
 			limpiar();
-			if (vida == 0)
+			if (vida <= 0)
 			{
 				vista.setVidaRestanteValor(String.valueOf(vida));
 				vista.endProgram();
